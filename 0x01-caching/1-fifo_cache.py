@@ -8,16 +8,18 @@ from base_caching import BaseCaching
 
 class FIFOCache(BaseCaching):
     """Represents an object that allows storing and
-      retrieving items from a dictionary with a FIFO
-      removal mechanism when the limit is reached.
+    retrieving items from a dictionary with a FIFO
+    removal mechanism when the limit is reached.
     """
-    def __iter__(self):
-        """ Initialize the cache """
+    def __init__(self):
+        """Initializes the cache.
+        """
         super().__init__()
         self.cache_data = OrderedDict()
 
     def put(self, key, item):
-        """ Assign to the dictionary """
+        """Adds an item in the cache.
+        """
         if key is None or item is None:
             return
         self.cache_data[key] = item
@@ -26,5 +28,6 @@ class FIFOCache(BaseCaching):
             print("DISCARD:", first_key)
 
     def get(self, key):
-        """ Must return the value """
+        """Retrieves an item by key.
+        """
         return self.cache_data.get(key, None)
