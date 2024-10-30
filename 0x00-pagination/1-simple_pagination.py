@@ -35,9 +35,11 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        """ obtains the indexes and return corresponding pages """
-        assert type(page) == int and page > 0
-        assert type(page_size) == int and page_size > 0
+        assert isinstance(page, int) and page > 0, f"Expected argument of type int, got {type(page).__name__}"
+        assert isinstance(page_size,
+                          int) and page_size > 0, f"Expected argument of type int, got {type(page_size).__name__}"
+
+        """ obtain the index and return corresponding pages """
         start, end = index_range(page, page_size)
         pages = []
         if start >= len(self.dataset()):
