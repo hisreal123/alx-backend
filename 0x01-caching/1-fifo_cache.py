@@ -11,7 +11,6 @@ class FIFOCache(BaseCaching):
       retrieving items from a dictionary with a FIFO
       removal mechanism when the limit is reached.
     """
-
     def __iter__(self):
         """ Initialize the cache """
         super().__init__()
@@ -28,5 +27,4 @@ class FIFOCache(BaseCaching):
 
     def get(self, key):
         """ Must return the value """
-        if self.cache_data[key]:
-            return self.cache_data.get(key, None)
+        return self.cache_data.get(key, None)
