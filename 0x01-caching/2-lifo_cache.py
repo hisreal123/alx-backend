@@ -1,52 +1,35 @@
-#!/usr/bin/env fish
-python3 -m doctest -v (basename (status -f))
-exit
+#!/usr/bin/env python3
+"""Last-In First-Out caching module.
 """
->>> FIFOCache = __import__('1-fifo_cache').FIFOCache
->>> my_cache = FIFOCache()
->>> my_cache.put("A", "Hello")
->>> my_cache.put("B", "World")
->>> my_cache.put("C", "Holberton")
->>> my_cache.put("D", "School")
->>> my_cache.print_cache()
-Current cache:
-A: Hello
-B: World
-C: Holberton
-D: School
+from collections import OrderedDict
 
->>> my_cache.put("E", "Battery")
-DISCARD: A
+from base_caching import BaseCaching
 
->>> my_cache.print_cache()
-Current cache:
-B: World
-C: Holberton
-D: School
-E: Battery
 
->>> my_cache.put("C", "Street")
->>> my_cache.print_cache()
-Current cache:
-B: World
-C: Street
-D: School
-E: Battery
+class LIFOCache(BaseCaching):
+    """Represents an object that allows storing and
+    retrieving items from a dictionary with a LIFO
+    removal mechanism when the limit is reached.
+    """
+    def __init__(self):
+        """Initializes the cache.
+        """
+        super().__init__()
+        self.cache_data = OrderedDict()
 
->>> my_cache.put("F", "Mission")
-DISCARD: B
+    def put(self, key, item):
+        """Adds an item in the cache.
+        """
+        if key is None or item is None:
+            return
+        if key not in self.cache_data:
+            if len(self.cache_data) + 1 > BaseCaching.MAX_ITEMS:
+                last_key, _ = self.cache_data.popitem(True)
+                print("DISCARD:", last_key)
+        self.cache_data[key] = item
+        self.cache_data.move_to_end(key, last=True)
 
->>> my_cache.print_cache()
-Current cache:
-C: Street
-D: School
-E: Battery
-F: Mission
-
->>> print(my_cache.get(None))
-None
-
->>> print(my_cache.get("microsoft_build"))
-None
-
-""
+    def get(self, key):
+        """Retrieves an item by key.
+        """
+        return self.cache_data.get(key, None)
