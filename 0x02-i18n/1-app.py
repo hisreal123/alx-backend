@@ -1,19 +1,24 @@
-from flask import Flask, jsonify, render_template
-from flask_cors import CORS
+#!/usr/bin/env python3
+"""A babel and flask app"""
+
+from flask import Flask, render_template
 from flask_babel import Babel
 
-app = Flask(__name__, static_folder='static', template_folder='templates')
-# app.config.from_pyfile('mysettings.cfg')
-babel = Babel(app)
-CORS(app)
-
 class Config:
-    LANGUAGES = ['en', 'us']
+    """ Setting the language and the locale and timezone"""
+    LANGUAGES = ["en", "fr"]
+    BABEL_DEFAULT_LOCALE = "en"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
+
+app = Flask(__name__)
+app.config.from_object(Config)
+babel = Babel(app)
 
 @app.route('/')
-def index():
-  return render_template('0-index.html')
+def hello_world():
+    """ to run on website"""
+    return render_template("1-index.html")
 
 
 if __name__ == '__main__':
-  app.run(debug=True)
+  app.run(host='0.0.0.0', port='5000', debug=True)
